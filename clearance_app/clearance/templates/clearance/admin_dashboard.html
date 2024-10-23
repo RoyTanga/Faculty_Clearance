@@ -1,0 +1,32 @@
+{% extends 'clearance/base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+{% for clearance_set in clearance_sets %}
+    <h3>Clearance Set for {{ clearance_set.faculty.username }} ({{ clearance_set.created_at|date:"F d, Y" }})</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Clearance Type</th>
+                <th>Status</th>
+                <th>Predicted At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for document in clearance_set.documents.all %}
+            <tr>
+                <td>{{ document.get_clearance_type_display }}</td>
+                <td>{{ document.clearance_status|default:"Not predicted" }}</td>
+                <td>{{ document.predicted_at|default:"N/A" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if not clearance_set.is_complete %}
+        <a href="{% url 'predict_clearances' clearance_set.id %}" class="btn">Predict Clearances</a>
+    {% endif %}
+{% empty %}
+    <p>No clearance sets found.</p>
+{% endfor %}
+{% endblock %}

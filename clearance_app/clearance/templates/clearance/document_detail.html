@@ -1,0 +1,12 @@
+{% extends 'clearance/base.html' %}
+
+{% block content %}
+<h2>Document Details</h2>
+<p>Clearance Type: {{ document.get_clearance_type_display }}</p>
+<p>Uploaded At: {{ document.uploaded_at }}</p>
+<p>Predicted Status: {{ document.get_predicted_status_display }}</p>
+<p>Predicted At: {% if document.predicted_at %}{{ document.predicted_at }}{% else %}Not predicted yet{% endif %}</p>
+<p>Current Status: {{ document.get_clearance_status_display }}</p>
+<p>File: <a href="{{ document.file.url }}">Download</a></p>
+<a href="{% url 'faculty_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+{% endblock %}

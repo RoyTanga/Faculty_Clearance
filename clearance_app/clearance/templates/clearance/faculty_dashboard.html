@@ -1,0 +1,80 @@
+{% extends 'clearance/base.html' %}
+{% load clearance_filters %}
+
+{% block title %}Faculty Dashboard{% endblock %}
+
+{% block content %}
+<h1>Faculty Dashboard</h1>
+
+<a href="{% url 'create_new_set' %}" class="btn btn-primary mb-3">Create New Set</a>
+
+{% for clearance_set in clearance_sets %}
+    <h2>{{ clearance_set.name }} - {{ clearance_set.academic_year }}</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Clearance Type</th>
+                <th>Document</th>
+                <th>Status</th>
+                <th>Predicted Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for clearance_type, clearance_name in clearance_types.items %}
+                {% with document=clearance_set|get_document:clearance_type %}
+                <tr>
+                    <td>{{ clearance_name }}</td>
+                    {% if document %}
+                        <td>
+                            <a href="{{ document.file.url }}" target="_blank">{{ document.file_name }}</a>
+                        </td>
+                        <td>{{ document.get_clearance_status_display }}</td>
+                        <td>{{ document.predicted_status }}</td>
+                    {% else %}
+                        <td>No document</td>
+                        <td>-</td>
+                        <td>-</td>
+                    {% endif %}
+                    <td>
+                        <a href="{% url 'upload_document' set_id=clearance_set.id clearance_type=clearance_type %}" class="btn btn-sm btn-primary">
+                            {% if document %}Update{% else %}Upload{% endif %}
+                        </a>
+                    </td>
+                </tr>
+                {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <button class="btn btn-success predict-all mb-3" data-set-id="{{ clearance_set.id }}">Predict All</button>
+{% endfor %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    $('.predict-all').click(function() {
+        var setId = $(this).data('set-id');
+        $.ajax({
+            url: "{% url 'predict_all' %}",
+            method: 'POST',
+            data: {
+                'set_id': setId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    alert('Predictions completed');
+                    location.reload();
+                } else {
+                    alert('An error occurred during prediction');
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('An error occurred: ' + error);
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
