@@ -21,6 +21,7 @@ from django.urls import reverse_lazy
 from django.db import IntegrityError
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from .utils import send_clearance_status_email
 
 logging.basicConfig(level=logging.INFO)
 
@@ -171,10 +172,24 @@ def admin_signup(request):
 @user_passes_test(lambda u: u.is_faculty)
 def faculty_dashboard(request):
     clearance_sets = ClearanceSet.objects.filter(faculty=request.user).order_by('-created_at')
-    clearance_types = dict(Document.CLEARANCE_TYPES)
+    
+    # Calculate statistics
+    total_documents = Document.objects.filter(clearance_set__faculty=request.user).count()
+    approved_documents = Document.objects.filter(
+        clearance_set__faculty=request.user,
+        predicted_status='APPROVED'
+    ).count()
+    pending_documents = Document.objects.filter(
+        clearance_set__faculty=request.user,
+        predicted_status='PENDING'
+    ).count()
+    
     context = {
         'clearance_sets': clearance_sets,
-        'clearance_types': clearance_types,
+        'clearance_types': dict(Document.CLEARANCE_TYPES),
+        'total_documents': total_documents,
+        'approved_documents': approved_documents,
+        'pending_documents': pending_documents,
     }
     return render(request, 'clearance/faculty_dashboard.html', context)
 
@@ -267,7 +282,7 @@ def custom_login(request):
 @login_required
 @user_passes_test(lambda u: u.is_superuser)
 def super_dashboard(request):
-    # Your superuser dashboard logic here
+    # Your superuser dashboard logic here   
     return render(request, 'clearance/super_dashboard.html')
 
 def custom_logout(request):
@@ -332,36 +347,6 @@ def document_detail(request, pk):
     return render(request, 'clearance/document_detail.html', {'document': document})
 
 @login_required
-def create_new_clearance_set(request):
-    if request.method == 'POST' and request.user.is_faculty:
-        new_set = ClearanceSet.objects.create(faculty=request.user)
-        return redirect('faculty_dashboard')
-    return redirect('faculty_dashboard')
-
-@require_POST
-@login_required
-def predict_all(request):
-    set_id = request.POST.get('set_id')
-    try:
-        clearance_set = ClearanceSet.objects.get(id=set_id, faculty=request.user)
-        predictor = ClearancePredictor()
-        
-        for document in clearance_set.documents.all():
-            try:
-                predicted_status = predictor.predict(document)
-                document.predicted_status = predicted_status
-                document.save()
-            except Exception as e:
-                # Log the error
-                print(f"Error predicting document {document.id}: {str(e)}")
-        
-        return JsonResponse({'status': 'success'})
-    except Exception as e:
-        # Log the error
-        print(f"Error in predict_all: {str(e)}")
-        return JsonResponse({'status': 'error', 'message': str(e)})
-
-@login_required
 def create_new_set(request):
     if request.method == 'POST':
         form = ClearanceSetForm(request.POST)
@@ -405,4 +390,28 @@ def upload_document(request, set_id, clearance_type):
         'clearance_type': dict(Document.CLEARANCE_TYPES)[clearance_type],
     }
     return render(request, 'clearance/upload_document.html', context)
+
+@require_POST
+@login_required
+def predict_all(request):
+    if request.method == 'POST':
+        set_id = request.POST.get('set_id')
+        clearance_set = get_object_or_404(ClearanceSet, id=set_id, faculty=request.user)
+        predictor = ClearancePredictor()
+        
+        # Get all documents for this set
+        documents = Document.objects.filter(clearance_set=clearance_set)
+        
+        for document in documents:
+            # Predict status
+            predicted_status = predictor.predict(document)
+            document.predicted_status = predicted_status
+            document.save()
+            
+            # Send email notification
+            send_clearance_status_email(document)
+        
+        return JsonResponse({'status': 'success'})
+    
+    return JsonResponse({'status': 'error'}, status=400)
 

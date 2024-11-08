@@ -124,8 +124,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
-MEDIA_URL = '/media/'
+# Media files (Uploaded files)
+MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
@@ -141,45 +146,63 @@ LOGIN_REDIRECT_URL = '/'  # This will be overridden for superusers in the view
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'formatter': 'verbose',
         },
     },
     'root': {
-        'handlers': ['console'],
+        'handlers': ['console', 'file'],
         'level': 'INFO',
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'clearance': {
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,
         },
     },
 }
 
+# Jazzmin UI Customization
 JAZZMIN_UI_TWEAKS = {
     "navbar_small_text": False,
     "footer_small_text": False,
     "body_small_text": False,
     "brand_small_text": False,
-    "brand_colour": "navbar-success",
-    "accent": "accent-teal",
-    "navbar": "navbar-dark",
-    "no_navbar_border": False,
-    "navbar_fixed": False,
+    "brand_colour": "navbar-primary",
+    "accent": "accent-navy",
+    "navbar": "navbar-navy",  # dark blue navbar
+    "no_navbar_border": True,
+    "navbar_fixed": True,
     "layout_boxed": False,
     "footer_fixed": False,
-    "sidebar_fixed": False,
-    "sidebar": "sidebar-dark-success",
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-yellow",  # yellow sidebar
     "sidebar_nav_small_text": False,
     "sidebar_disable_expand": False,
-    "sidebar_nav_child_indent": False,
+    "sidebar_nav_child_indent": True,
     "sidebar_nav_compact_style": False,
     "sidebar_nav_legacy_style": False,
     "sidebar_nav_flat_style": False,
-    "theme": "cyborg",
+    "theme": "default",
     "dark_mode_theme": None,
     "button_classes": {
         "primary": "btn-primary",
@@ -187,6 +210,96 @@ JAZZMIN_UI_TWEAKS = {
         "info": "btn-info",
         "warning": "btn-warning",
         "danger": "btn-danger",
-        "success": "btn-success"
-    }
+        "success": "btn-success",
+    },
 }
+
+# Custom CSS to fine-tune the colors
+JAZZMIN_SETTINGS = {
+    # title of the window
+    "site_title": "Clearance Admin",
+
+    # Title on the login screen
+    "site_header": "Clearance",
+
+    # Title on the brand
+    "site_brand": "Clearance Admin",
+
+    # Logo to use for your site
+    "site_logo": "clearance/images/logo.jpeg",
+
+    # Logo to use for login form in dark theme
+    "login_logo": "clearance/images/logo.jpeg",
+
+    # Logo to use for login form in dark theme
+    "login_logo_dark": "clearance/images/logo.jpeg",
+
+    # CSS classes that are applied to the logo
+    "site_logo_classes": "img-fluid",
+
+    # Relative path to a favicon for your site
+    "site_icon": "clearance/images/logo.jpeg",
+
+    # Welcome text on the login screen
+    "welcome_sign": "Welcome to the Clearance System",
+
+    # Copyright on the footer
+    "copyright": "Clearance System Ltd",
+
+    # List of model admins to search from the search bar
+    "search_model": ["auth.User", "clearance.Document", "clearance.ClearanceSet"],
+
+    # Field name on user model that contains avatar
+    "user_avatar": None,
+
+    ############
+    # Top Menu #
+    ############
+    # Links to put along the top menu
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "Support", "url": "https://github.com/yourusername/clearance_app", "new_window": True},
+        {"model": "auth.User"},
+        {"app": "clearance"},
+    ],
+
+    #############
+    # Side Menu #
+    #############
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+    # Custom icons for side menu apps/models
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "clearance.Document": "fas fa-file-alt",
+        "clearance.ClearanceSet": "fas fa-folder-open",
+    },
+
+    # Default icons
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+
+    #############
+    # UI Tweaks #
+    #############
+    # Custom CSS/JS files
+    "custom_css": "css/custom_admin.css",
+    "custom_js": None,
+    
+    # Show UI customizer
+    "show_ui_builder": False,
+
+    # Change view format
+    "changeform_format": "horizontal_tabs",
+}
+
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Or your SMTP server
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'tangaroy.rt@gmail.com'  # Your email
+EMAIL_HOST_PASSWORD = 'pise vzua hpvx shsd'  # Your email app password

@@ -1,12 +1,257 @@
 {% extends 'clearance/base.html' %}
+{% load widget_tweaks %}
 
 {% block title %}Create New Clearance Set{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Container styles */
+    .create-set-container {
+        background-color: #f4f6f9;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .create-set-card {
+        background-color: white;
+        border-radius: 0.25rem;
+        box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        margin: 20px auto;
+        max-width: 800px;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    /* Header styles */
+    .card-header {
+        background-color: #001f3f;
+        color: white;
+        padding: 15px 20px;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .card-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+    /* Card body styles */
+    .card-body {
+        padding: 20px;
+    }
+
+    /* Form styles */
+    .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .form-control {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 0.75rem;
+        width: 100%;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .form-control:focus {
+        border-color: #ffd700;
+        box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.25);
+        outline: none;
+    }
+
+    .required-field {
+        color: #dc3545;
+        margin-left: 4px;
+    }
+
+    .help-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+
+    .error-feedback {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Button styles */
+    .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    /* Primary button - Yellow */
+    .btn-primary {
+        background-color: #ffd700;
+        color: #000;
+        border: none;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary:hover {
+        background-color: #ffed4a;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-primary:active {
+        background-color: #f4b400;
+        transform: translateY(0);
+    }
+
+    /* Cancel button - Light Yellow */
+    .btn-cancel {
+        background-color: #fff5cc;
+        color: #000;
+        border: 1px solid #ffd700;
+    }
+
+    .btn-cancel:hover {
+        background-color: #fff9e6;
+        border-color: #ffed4a;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+        .create-set-card {
+            margin: 10px;
+        }
+
+        .action-buttons {
+            flex-direction: column-reverse;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<h2>Create New Clearance Set</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Create Set</button>
-</form>
+<div class="create-set-container">
+    <div class="create-set-card">
+        <div class="card-header">
+            <h2><i class="fas fa-plus-circle"></i> Create New Clearance Set</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" id="createSetForm">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="form-label">
+                        {{ field.label }}
+                        {% if field.field.required %}
+                            <span class="required-field">*</span>
+                        {% endif %}
+                    </label>
+                    
+                    {% render_field field class="form-control" placeholder=field.label %}
+                    
+                    {% if field.help_text %}
+                        <small class="help-text">{{ field.help_text }}</small>
+                    {% endif %}
+                    
+                    {% for error in field.errors %}
+                        <div class="error-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <div class="action-buttons">
+                    <a href="{% url 'faculty_dashboard' %}" class="btn btn-cancel">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Create Set
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Form validation
+    $('#createSetForm').on('submit', function(e) {
+        let isValid = true;
+        $('.form-control').each(function() {
+            if ($(this).prop('required') && !$(this).val()) {
+                isValid = false;
+                $(this).addClass('is-invalid');
+                if (!$(this).next('.error-feedback').length) {
+                    $(this).after('<div class="error-feedback">This field is required.</div>');
+                }
+            } else {
+                $(this).removeClass('is-invalid');
+                $(this).next('.error-feedback').remove();
+            }
+        });
+        
+        if (!isValid) {
+            e.preventDefault();
+            return false;
+        }
+
+        // Show loading state on submit button
+        const submitBtn = $(this).find('button[type="submit"]');
+        submitBtn.prop('disabled', true)
+                .html('<i class="fas fa-spinner fa-spin"></i> Creating...');
+    });
+
+    // Remove error messages on input
+    $('.form-control').on('input', function() {
+        $(this).removeClass('is-invalid');
+        $(this).next('.error-feedback').remove();
+    });
+});
+</script>
 {% endblock %}

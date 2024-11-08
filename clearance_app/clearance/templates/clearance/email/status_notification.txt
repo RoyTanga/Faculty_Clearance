@@ -1,0 +1,16 @@
+Clearance Status Update
+
+Hello {{ faculty_name }},
+
+Your clearance document has been processed with the following details:
+
+Clearance Set: {{ set_name }}
+Academic Year: {{ academic_year }}
+Clearance Type: {{ clearance_type }}
+Document: {{ file_name }}
+Predicted Status: {{ predicted_status }}
+Uploaded: {{ uploaded_at }}
+
+If you have any questions, please contact your department administrator.
+
+This is an automated message. Please do not reply to this email. 

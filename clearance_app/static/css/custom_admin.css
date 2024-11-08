@@ -1,0 +1,197 @@
+/* Admin Logo Styling */
+
+
+
+.brand-link .brand-image {
+    width: 40px;
+    height: 40px;
+    max-height: none;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: -3px;
+    border-radius: 50%;
+}
+
+/* Login Page Logo */
+.login-logo img {
+    width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Center the logo on login page */
+.login-logo {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* Adjust brand text */
+.brand-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+/* Custom navbar styling */
+.navbar-custom {
+    background-color: #343a40;
+}
+
+/* Sidebar logo container */
+.sidebar-brand-container {
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
+/* Navbar customization - Dark Blue */
+.navbar-navy {
+    background-color: #001f3f !important;  /* Dark blue */
+    color: white !important;
+}
+
+/* Sidebar customization - Yellow */
+.sidebar-yellow {
+    background-color: #ffd700 !important;  /* Yellow */
+}
+
+/* Sidebar text color */
+.sidebar-yellow .nav-item .nav-link {
+    color: #000 !important;  /* Black text for contrast */
+}
+
+/* Sidebar hover effects */
+.sidebar-yellow .nav-item .nav-link:hover {
+    background-color: #ffed4a !important;  /* Lighter yellow on hover */
+    color: #000 !important;
+}
+
+/* Active menu item */
+.sidebar-yellow .nav-item .nav-link.active {
+    background-color: #f4b400 !important;  /* Darker yellow for active items */
+    color: #000 !important;
+}
+
+/* Brand logo area */
+.brand-link {
+    background-color: #001f3f !important;  /* Match navbar color */
+    color: white !important;
+}
+
+/* Sidebar brand text */
+.brand-text {
+    color: white !important;
+}
+
+/* User panel in sidebar */
+.user-panel {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Navigation header text in sidebar */
+.nav-sidebar .nav-header {
+    color: #000 !important;
+    font-weight: bold;
+}
+
+/* Submenu background */
+.sidebar-yellow .nav-treeview > .nav-item > .nav-link {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Submenu hover */
+.sidebar-yellow .nav-treeview > .nav-item > .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #ffd700;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #f4b400;
+    border-radius: 3px;
+}
+
+/* Navbar links */
+.navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: white !important;
+}
+
+/* Search bar in navbar */
+.navbar .form-control-navbar {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+.navbar .form-control-navbar::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Navbar search button */
+.navbar .btn-navbar {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Logo adjustments */
+.brand-link .brand-image {
+    opacity: 1;
+    box-shadow: none;
+}
+
+/* Footer customization */
+.main-footer {
+    background-color: #f8f9fa;
+    color: #001f3f;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Content header */
+.content-header {
+    padding: 15px 0.5rem;
+}
+
+.content-header h1 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: #001f3f;
+}
+
+/* Breadcrumb customization */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+/* Card customization */
+.card {
+    box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+    margin-bottom: 1rem;
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    padding: .75rem 1.25rem;
+}
+
+/* Table header colors */
+.table thead th {
+    background-color: #001f3f;
+    color: white;
+} 

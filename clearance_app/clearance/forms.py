@@ -61,3 +61,9 @@ class ClearanceSetForm(forms.ModelForm):
     class Meta:
         model = ClearanceSet
         fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter clearance set name'
+            })
+        }

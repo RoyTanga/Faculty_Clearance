@@ -14,7 +14,6 @@ urlpatterns = [
     path('predict/<int:set_id>/', views.predict_clearances, name='predict_clearances'),
     path('logout/', views.custom_logout, name='logout'),
     path('document/<int:pk>/', views.document_detail, name='document_detail'),
-    path('create_new_clearance_set/', views.create_new_clearance_set, name='create_new_clearance_set'),
     path('create-new-set/', views.create_new_set, name='create_new_set'),
     path('upload-document/<int:set_id>/<str:clearance_type>/', views.upload_document, name='upload_document'),
     path('predict-all/', views.predict_all, name='predict_all'),
