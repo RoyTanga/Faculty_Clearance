@@ -1,0 +1,9 @@
+name = "faculty-clearance"
+type = "javascript"
+account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"
+workers_dev = true
+compatibility_date = "2025-01-23"
+
+[site]
+bucket = "./dist" # Ensure Cloudflare serves files from the `dist` directory
+entry-point = "./src"
