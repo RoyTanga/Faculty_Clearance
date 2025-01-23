@@ -1,12 +1,24 @@
 {
-  "name": "clearance-prof",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
-}
+    "name": "clearance-prof",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "build": "webpack"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "@vercel/nft": "^0.29.0"
+    },
+    "dependencies": {
+      "@types/formidable": "^3.4.5",
+      "@types/nodemailer": "^6.4.17",
+      "formidable": "^3.5.2",
+      "nodemailer": "^6.10.0",
+      "tesseract.js": "^6.0.0"
+    }
+  }
+  
